@@ -6,6 +6,7 @@ Minimal OLED text/menu library for **SSD1306 128×64 I²C** and **Arduino Nano (
 
 ## Features
 - 16×8 ASCII character grid, text, menus and progress indicator.
+- Automatic OLED dimming after 60 seconds of inactivity; buttons restore brightness in the demo.
 - Changed-character updates (128 B desired + 128 B displayed text buffers).
 - Uses Arduino `Wire` at 400 kHz; no external display library.
 - Text-only Shieldio boot placeholder. Official logo bitmap is planned.
@@ -36,6 +37,14 @@ replace a real-device test. See [CONTRIBUTING.md](CONTRIBUTING.md).
 Before registry publication: Arduino IDE → Sketch → Include Library → Add .ZIP Library,
 using the repository's ZIP download. After registry acceptance: search for
 `ShieldioDisplay` in Library Manager.
+
+## Automatic dimming
+
+The default inactivity timeout is 60 seconds. Call `display.tick()` every
+iteration of `loop()`; call `display.wake()` when user input occurs.
+`display.setDimTimeout(0)` disables automatic dimming.
+`display.setBrightness(127, 8)` sets normal and dimmed contrast.
+This changes OLED contrast, not MCU sleep or power supply.
 
 ## Limitations
 SSD1306 only (not SH1106), 128×64 only, printable ASCII only; no Czech diacritics.

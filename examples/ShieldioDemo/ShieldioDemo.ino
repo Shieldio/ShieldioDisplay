@@ -38,21 +38,15 @@ void setup() {
   pinMode(BUTTON_NEXT, INPUT);
   pinMode(BUTTON_SELECT, INPUT);
   display.begin();
-  display.setDimTimeout(60000UL);
-  display.setBrightness(127, 8);
-  display.logo();
-  delay(1000);
   showScreen();
 }
 
 void loop() {
-  display.tick();
   unsigned long now = millis();
   uint8_t next = digitalRead(BUTTON_NEXT);
   uint8_t select = digitalRead(BUTTON_SELECT);
   if (lastNext == HIGH && next == LOW && now >= nextReady) {
     nextReady = now + 180;
-    display.wake();
     if (!detail) selected = (selected + 1) % 4;
     else if (selected == 1) ++counter;
     else if (selected == 2) progress = (progress + 10) % 110;
@@ -60,7 +54,6 @@ void loop() {
   }
   if (lastSelect == HIGH && select == LOW && now >= selectReady) {
     selectReady = now + 180;
-    display.wake();
     detail = !detail;
     showScreen();
   }

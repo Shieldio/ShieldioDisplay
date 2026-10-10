@@ -3,7 +3,7 @@
 #include <string.h>
 #include <stdio.h>
 
-ShieldioDisplay::ShieldioDisplay(uint8_t address) : address_(address), invalid_(true) {
+ShieldioDisplay::ShieldioDisplay(uint8_t address) : address_(address), invalid_(true), dimTimeout_(60000UL), lastActivity_(0), normalBrightness_(127), dimBrightness_(8), dimmed_(false) {
   memset(cells_, ' ', sizeof(cells_));
   memset(shown_, ' ', sizeof(shown_));
 }
@@ -27,6 +27,7 @@ void ShieldioDisplay::begin() {
   for (uint8_t i = 0; i < sizeof(init); ++i) command(init[i]);
   clear();
   render();
+  lastActivity_ = millis();
 }
 
 void ShieldioDisplay::window(uint8_t start, uint8_t end, uint8_t page) {
@@ -116,3 +117,29 @@ void ShieldioDisplay::menu(const char* title, const char* const* items, uint8_t 
 
 void ShieldioDisplay::contrast(uint8_t value) { command(0x81); command(value); }
 void ShieldioDisplay::sleep(bool enabled) { command(enabled ? 0xAE : 0xAF); }
+
+void ShieldioDisplay::setDimTimeout(unsigned long milliseconds) {
+  dimTimeout_ = milliseconds;
+  wake();
+}
+
+void ShieldioDisplay::setBrightness(uint8_t normal, uint8_t dimmed) {
+  normalBrightness_ = normal;
+  dimBrightness_ = dimmed;
+  contrast(dimmed_ ? dimBrightness_ : normalBrightness_);
+}
+
+void ShieldioDisplay::wake() {
+  lastActivity_ = millis();
+  if (dimmed_) {
+    dimmed_ = false;
+    contrast(normalBrightness_);
+  }
+}
+
+void ShieldioDisplay::tick() {
+  if (dimTimeout_ && !dimmed_ && (unsigned long)(millis() - lastActivity_) >= dimTimeout_) {
+    dimmed_ = true;
+    contrast(dimBrightness_);
+  }
+}

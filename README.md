@@ -57,6 +57,38 @@ Wire transfer errors are not currently reported by this API.
 
 License: MIT.
 
+## Animal faces (development)
+
+Use the small `ShieldioDisplay` class for a cat, dog or lion with happy, sad,
+surprised, sleepy or angry expressions:
+
+```cpp
+display.face(ShieldioDisplay::Animal::Cat, ShieldioDisplay::Mood::Happy);
+display.face(ShieldioDisplay::Animal::Dog, ShieldioDisplay::Mood::Sad);
+display.face(ShieldioDisplay::Animal::Lion, ShieldioDisplay::Mood::Happy, true); // Closed eyes.
+```
+
+`face()` replaces the whole screen and sends it immediately; no `render()` is
+needed. It uses a temporary 128-byte page instead of a 1024-byte framebuffer,
+adds no persistent RAM to the display object and needs no bitmap pack or extra
+display dependency. Shapes are drawn with integer arithmetic. On `ShieldioCanvas`
+the face also replaces the canvas so you can draw on top and call `render()`.
+On the text class, the next `render()` restores the previous text; call `clear()`
+before writing a new text screen if you want to discard that text.
+
+`AnimalFaces` cycles all animals and expressions with blinking.
+`InteractivePet` uses D11 to pet the animal (happy face and wagging tail on D9),
+and D12 to change animal. With D11 released, the pet sleeps and the tail rests.
+Both buttons use external pull-ups. The demo uses `millis()` so button reading
+continues while the tail moves; it requires the Arduino Servo library.
+Use a servo supply suitable for its current and connect the grounds together.
+Adjust the example's 65–115 degree range to the physical tail before attaching it.
+
+The existing text example keeps the same compiled footprint. Face code is in a
+separate translation unit so text-only sketches do not link it. Compile results
+and simulated SSD1306 frame checks do not replace testing the OLED and servo on
+hardware. This development addition does not change the release version/tag.
+
 ## Drawing
 
 Use `ShieldioCanvas` in place of `ShieldioDisplay` when you need graphics:
@@ -82,3 +114,4 @@ All drawing functions accept a final `on` argument (default `true`); pass `false
 to erase. Rectangles and circles accept `filled` before `on`. Non-positive
 rectangle sizes and radii outside 0–143 draw nothing. Off-screen pixels are clipped.
 Text replaces its 8×8 cells, so write text before overlapping shapes.
+

@@ -15,6 +15,10 @@ public:
   void menu(const char* title, const char* const* items, uint8_t count, uint8_t selected);
   void contrast(uint8_t value);
   void sleep(bool enabled);
+  enum class Animal : uint8_t { Cat, Dog, Lion };
+  enum class Mood : uint8_t { Happy, Sad, Surprised, Sleepy, Angry };
+  // Replaces the screen immediately. Uses a 128-byte page, no full canvas.
+  void face(Animal animal = Animal::Cat, Mood mood = Mood::Happy, bool blink = false);
 private:
   uint8_t address_;
   char cells_[128];
@@ -43,3 +47,4 @@ public:
 private:
   uint8_t buffer_[1024];
 };
+

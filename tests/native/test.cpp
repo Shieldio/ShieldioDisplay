@@ -26,4 +26,24 @@ int main(){
   d.pixel(127,63,false);d.render();assert(!lit(127,63));
   d.clear();d.render();sent=Wire.dataBytes;d.clear();d.render();assert(sent==Wire.dataBytes);
   puts("Geometry, clipping, text overlay and differential Wire transfers passed.");
+  using Animal = ShieldioDisplay::Animal;
+  using Mood = ShieldioDisplay::Mood;
+  text.clear();text.render();
+  auto blank = Wire.ram;
+  for(int a=0;a<3;++a) for(int m=0;m<5;++m) for(int b=0;b<2;++b) {
+    text.face((Animal)a,(Mood)m,b);
+    auto streamed = Wire.ram;
+    assert(streamed != blank);
+    d.face((Animal)a,(Mood)m,b);
+    assert(Wire.ram == streamed); // Canvas and low-RAM paths agree.
+    text.render();assert(Wire.ram == blank); // Restore even unchanged text.
+  }
+  text.face(Animal::Cat,Mood::Happy);auto happy=Wire.ram;
+  text.face(Animal::Cat,Mood::Sad);assert(Wire.ram!=happy);
+  text.face(Animal::Dog,Mood::Happy);assert(Wire.ram!=happy);
+  text.face(Animal::Cat,Mood::Happy,true);assert(Wire.ram!=happy);
+  d.face(Animal::Lion,Mood::Happy);d.pixel(0,0);d.render();assert(lit(0,0));
+  d.clear();d.render();assert(Wire.ram==blank);
+  puts("30 animal/mood/blink frames, canvas parity and text restoration passed.");
 }
+

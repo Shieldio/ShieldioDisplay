@@ -15,7 +15,11 @@ jobs:
           ln -s "$GITHUB_WORKSPACE" "$HOME/Arduino/libraries/ShieldioDisplay"
           arduino-cli compile --fqbn arduino:avr:nano examples/ShieldioDemo
       - run: arduino-cli compile --fqbn arduino:avr:nano examples/Shapes
+      - run: arduino-cli compile --fqbn arduino:avr:nano examples/AnimalFaces
+      - run: arduino-cli lib install Servo
+      - run: arduino-cli compile --fqbn arduino:avr:nano examples/InteractivePet
       - name: Check geometry and differential I2C updates
         run: |
-          g++ -std=c++11 -Wall -Wextra -fsanitize=address,undefined -I tests/native -I src src/ShieldioDisplay.cpp tests/native/test.cpp -o /tmp/shieldio-native
+          g++ -std=c++11 -Wall -Wextra -fsanitize=address,undefined -I tests/native -I src src/ShieldioDisplay.cpp src/ShieldioFaces.cpp tests/native/test.cpp -o /tmp/shieldio-native
           /tmp/shieldio-native
+

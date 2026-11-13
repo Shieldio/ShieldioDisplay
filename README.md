@@ -2,14 +2,14 @@
 
 OLED text/menu and drawing library for **SSD1306 128×64 I²C** and **Arduino Nano (ATmega328P)**.
 
-**Status: v0.2.0. Text and graphics compile for Arduino Nano; graphics still require a hardware smoke test. Not yet published in Arduino Library Manager.**
+**Status: v0.3.0. Animal faces have been tested on a physical OLED by the project maintainer. InteractivePet servo behavior has not been separately confirmed on hardware. Not yet published in Arduino Library Manager.**
 
 ## Features
 - 16×8 ASCII character grid, text, menus and progress indicator.
 - Automatic one-second startup splash screen from `display.begin()`.
 - Changed-character updates (128 B desired + 128 B displayed text buffers).
 - Optional `ShieldioCanvas`: pixels, lines, rectangles, squares (equal width/height), outlined and filled circles. Coordinates in pixels (x 0–127, y 0–63); text keeps its character coordinates (column 0–15, row 0–7).
-- `ShieldioDisplay` keeps text-only storage; `ShieldioCanvas` adds a fixed 1024 B canvas, with changed spans sent per page and no heap allocation. Leave room for stack and other peripherals on Nano.
+- Animal faces: cat, dog and lion with five moods and blinking, using only a temporary 128 B page.\n- `ShieldioDisplay` keeps text-only storage; `ShieldioCanvas` adds a fixed 1024 B canvas, with changed spans sent per page and no heap allocation. Leave room for stack and other peripherals on Nano.
 - Uses Arduino `Wire` at 400 kHz; no external display library.
 - Text-only Shieldio boot placeholder. Official logo bitmap is planned.
 
@@ -51,13 +51,13 @@ Wire transfer errors are not currently reported by this API.
 
 ## Release / Arduino Library Manager
 1. Ensure Arduino CI passes and test on Nano hardware.
-2. Create a GitHub release with semantic tag `v0.2.0`.
+2. Create a GitHub release with semantic tag `v0.3.0`.
 3. Submit the repository URL to [Arduino Library Registry](https://github.com/arduino/library-registry).
 4. After acceptance, subsequent tagged releases are indexed automatically.
 
 License: MIT.
 
-## Animal faces (development)
+## Animal faces
 
 Use the small `ShieldioDisplay` class for a cat, dog or lion with happy, sad,
 surprised, sleepy or angry expressions:
@@ -87,7 +87,7 @@ Adjust the example's 65–115 degree range to the physical tail before attaching
 The existing text example keeps the same compiled footprint. Face code is in a
 separate translation unit so text-only sketches do not link it. Compile results
 and simulated SSD1306 frame checks do not replace testing the OLED and servo on
-hardware. This development addition does not change the release version/tag.
+hardware. These features are included in library version 0.3.0.
 
 ## Drawing
 

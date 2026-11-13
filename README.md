@@ -9,7 +9,8 @@ OLED text/menu and drawing library for **SSD1306 128×64 I²C** and **Arduino Na
 - Automatic one-second startup splash screen from `display.begin()`.
 - Changed-character updates (128 B desired + 128 B displayed text buffers).
 - Optional `ShieldioCanvas`: pixels, lines, rectangles, squares (equal width/height), outlined and filled circles. Coordinates in pixels (x 0–127, y 0–63); text keeps its character coordinates (column 0–15, row 0–7).
-- Animal faces: cat, dog and lion with five moods and blinking, using only a temporary 128 B page.\n- `ShieldioDisplay` keeps text-only storage; `ShieldioCanvas` adds a fixed 1024 B canvas, with changed spans sent per page and no heap allocation. Leave room for stack and other peripherals on Nano.
+- Animal faces: cat, dog and lion with five moods and blinking, using only a temporary 128 B page.
+- `ShieldioDisplay` keeps text-only storage; `ShieldioCanvas` adds a fixed 1024 B canvas, with changed spans sent per page and no heap allocation. Leave room for stack and other peripherals on Nano.
 - Uses Arduino `Wire` at 400 kHz; no external display library.
 - Text-only Shieldio boot placeholder. Official logo bitmap is planned.
 
